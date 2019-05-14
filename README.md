@@ -37,12 +37,13 @@ If you wish to add custom map it has to be black/white pixels- black is wall/obs
 
 ## Known bugs
 - API might be in different place depends on the map.
-- Somtimes drone might crash(hit the black pixels) specially in difficult obstacles.
+- Sometimes drone might crash(hit the black pixels) specially in difficult obstacles.
+- Sometimes may be indifferent parameters which causing some pixels override - solution is to re-run project.
 
 ## Images
-https://imgur.com/lweL2Fp
-https://imgur.com/unUpwsL
-https://imgur.com/Ptnut2b
-https://imgur.com/Do0Z3gP
-https://imgur.com/Y73PO2C
+- https://imgur.com/lweL2Fp
+- https://imgur.com/unUpwsL
+- https://imgur.com/Ptnut2b
+- https://imgur.com/Do0Z3gP
+- https://imgur.com/Y73PO2C
 
