@@ -241,6 +241,9 @@ public class AutoAlgo1 {
 	
 	double max_distance_between_points = 100;
 	
+	boolean start_return_home = false;
+	
+	Point init_point;
 	public void ai(int deltaTime) {
 		if(!SimulationWindow.toogleAI) {
 			return;
@@ -250,7 +253,7 @@ public class AutoAlgo1 {
 		if(is_init) {
 			speedUp();
 			Point dronePoint = drone.getOpticalSensorLocation();
-			points.add(dronePoint);
+			init_point = new Point(dronePoint);
 			points.add(dronePoint);
 			is_init = false;
 		}
@@ -259,10 +262,23 @@ public class AutoAlgo1 {
 			//doLeftRight();
 		}
 		
-		double dis_from_last_point = Tools.getDistanceBetweenPoints(getLastPoint(), drone.getOpticalSensorLocation()); 
-		if(dis_from_last_point >= max_distance_between_points) {
-			Point dronePoint = drone.getOpticalSensorLocation();
-			points.add(dronePoint);
+		
+		Point dronePoint = drone.getOpticalSensorLocation();
+
+		
+		if(SimulationWindow.return_home) {
+			
+			if( Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) <  max_distance_between_points) {
+				if(points.size() <= 1 && Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) <  max_distance_between_points/5) {
+					speedDown();
+				} else {
+					removeLastPoint();
+				}
+			}
+		} else {
+			if( Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) >=  max_distance_between_points) {
+				points.add(dronePoint);
+			}
 		}
 	
 		
@@ -295,31 +311,48 @@ public class AutoAlgo1 {
 				Lidar lidar2 = drone.lidars.get(2);
 				double b = lidar2.current_distance;
 				
+				
+				
 				int spin_by = max_angle_risky;
+			
+			
 				
 				if(a > 270 && b > 270) {
 					is_lidars_max = true;
-					Point l1 = Tools.getPointByDistance(drone.getOpticalSensorLocation(), lidar1.degrees + drone.getGyroRotation(), lidar1.current_distance);
-					Point l2 = Tools.getPointByDistance(drone.getOpticalSensorLocation(), lidar2.degrees + drone.getGyroRotation(), lidar2.current_distance);
+					Point l1 = Tools.getPointByDistance(dronePoint, lidar1.degrees + drone.getGyroRotation(), lidar1.current_distance);
+					Point l2 = Tools.getPointByDistance(dronePoint, lidar2.degrees + drone.getGyroRotation(), lidar2.current_distance);
 					Point last_point = getAvgLastPoint();
 					double dis_to_lidar1 = Tools.getDistanceBetweenPoints(last_point,l1);
 					double dis_to_lidar2 = Tools.getDistanceBetweenPoints(last_point,l2);
-				
-					Point dronePoint = drone.getOpticalSensorLocation();
-					if( Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) >=  max_distance_between_points) {
-						points.add(dronePoint);
-					}
 					
+					if(SimulationWindow.return_home) {
+						if( Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) <  max_distance_between_points) {
+							removeLastPoint();
+						}
+					} else {
+						if( Tools.getDistanceBetweenPoints(getLastPoint(), dronePoint) >=  max_distance_between_points) {
+							points.add(dronePoint);
+						}
+					}
 					
 					spin_by = 90;
+					if(SimulationWindow.return_home) {
+						spin_by *= -1;
+					}
+					
+					
 					if(dis_to_lidar1 < dis_to_lidar2) {
-						spin_by *= -1; 
+						
+						spin_by *= (-1 ); 
 					}
 				} else {
+					
+					
 					if(a < b ) {
-						spin_by *= -1; 
+						spin_by *= (-1 ); 
 					}
 				}
+				
 				
 				
 				spinBy(spin_by,true,new Func() { 
@@ -425,6 +458,21 @@ public class AutoAlgo1 {
 		isRotating =1;
 	}
 	
+	public void spinBy(double degrees,boolean isFirst) {
+		lastGyroRotation = drone.getGyroRotation();
+		if(isFirst) {
+			degrees_left.add(0,degrees);
+			degrees_left_func.add(0,null);
+		
+			
+		} else {
+			degrees_left.add(degrees);
+			degrees_left_func.add(null);
+		}
+		
+		isRotating =1;
+	}
+	
 	public void spinBy(double degrees) {
 		lastGyroRotation = drone.getGyroRotation();
 		
@@ -434,12 +482,28 @@ public class AutoAlgo1 {
 	}
 	
 	public Point getLastPoint() {
+		if(points.size() == 0) {
+			return init_point;
+		}
+		
 		Point p1 = points.get(points.size()-1);
 		return p1;
 	}
 	
+	public Point removeLastPoint() {
+		if(points.isEmpty()) {
+			return init_point;
+		}
+		
+		return points.remove(points.size()-1);
+	}
+	
 	
 	public Point getAvgLastPoint() {
+		if(points.size() < 2) {
+			return init_point;
+		}
+		
 		Point p1 = points.get(points.size()-1);
 		Point p2 = points.get(points.size()-2);
 		return new Point((p1.x + p2.x) /2, (p1.y + p2.y) /2);

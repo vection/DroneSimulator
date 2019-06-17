@@ -26,6 +26,7 @@ public class SimulationWindow {
 	}
 
 	public static JLabel info_label;
+	public static boolean return_home = false;
 	boolean toogleStop = true;
 	private void initialize() {
 		frame = new JFrame();
@@ -203,6 +204,29 @@ public class SimulationWindow {
 		});
 		toogleAIBtn.setBounds(1400, 400, 120, 50);
 		frame.getContentPane().add(toogleAIBtn);
+		
+		/*
+		 * RETURN TO HOME
+		 */
+		
+
+		JButton returnBtn = new JButton("Return Home");
+		returnBtn.addActionListener(new ActionListener()
+		{
+			  public void actionPerformed(ActionEvent e)
+			  {
+				  return_home = !return_home;
+				  algo1.speedDown();
+				  algo1.spinBy(180, true, new Func() {
+						@Override
+						public void method() {
+							algo1.speedUp();
+						}
+					});
+			  }
+		});
+		returnBtn.setBounds(1500, 400, 120, 50);
+		frame.getContentPane().add(returnBtn);
 		
 		/*
 		 * Info label 
