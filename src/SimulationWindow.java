@@ -228,6 +228,17 @@ public class SimulationWindow {
 		returnBtn.setBounds(1500, 400, 120, 50);
 		frame.getContentPane().add(returnBtn);
 		
+		JButton Graph = new JButton("Open Graph");
+		Graph.addActionListener(new ActionListener()
+		{
+			  public void actionPerformed(ActionEvent e)
+			  {
+				  algo1.mGraph.drawGraph();
+			  }
+		});
+		Graph.setBounds(1600, 400, 120, 50);
+		frame.getContentPane().add(Graph);
+		
 		/*
 		 * Info label 
 		 */
