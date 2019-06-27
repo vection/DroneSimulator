@@ -1,13 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import org.jgrapht.*;
-import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.SimpleGraph;
-import org.jgrapht.io.ComponentNameProvider;
-import org.jgrapht.io.DOTExporter;
-import org.jgrapht.io.ExportException;
-import org.jgrapht.io.GraphExporter;
 
 public class AutoAlgo1 {
 	
