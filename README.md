@@ -35,6 +35,10 @@ Start/pause button, speed up/down, spin -+30/-+45/-+60/90/180.
 ## Map rules
 If you wish to add custom map it has to be black/white pixels- black is wall/obstacle, white is safe pass.
 
+## V2 update
+- Added return home bottom, by clicking it drone will return to starting point.
+- Directed Graph feature added.
+
 ## Known bugs
 - API might be in different place depends on the map.
 - Sometimes drone might crash(hit the black pixels) specially in difficult obstacles.
