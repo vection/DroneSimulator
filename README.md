@@ -37,7 +37,7 @@ If you wish to add custom map it has to be black/white pixels- black is wall/obs
 
 ## V2 update
 - Added return home bottom, by clicking it drone will return to starting point.
-- Directed Graph feature added.
+- Directed Graph feature added. (JGrapht library required)
 
 ## Known bugs
 - API might be in different place depends on the map.
